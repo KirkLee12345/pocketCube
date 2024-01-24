@@ -29,6 +29,8 @@ string allop[100];
 
 int cnt = 16;
 bool flag;
+int maxStep;
+/*debug*/int debugNum = 0;
 
 
 int main(){
@@ -53,7 +55,8 @@ int main(){
     cin >> x.d.a >> x.d.b >> x.d.c >> x.d.d;
 
     flag = false;
-	
+
+    cout << "Start to find the answer..." << endl;
 	startFindWay();
 
     for(int i = 1; i <= cnt; i++)
@@ -63,6 +66,7 @@ int main(){
             i = i + 3;
             continue;
         }
+        cout << "Found one possible answer: ";
         cout << allop[i] << ' ';
     }
 	
@@ -71,10 +75,13 @@ int main(){
 
 void startFindWay()
 {
-    for(char i : canOp)
+    for(maxStep = 1; maxStep <= 14; maxStep++)
     {
-        findWay(i, 1);
-        if(flag) return;
+        for(char i : canOp)
+        {
+            findWay(i, 1);
+            if(flag) return;
+        }
     }
 }
 
@@ -99,11 +106,21 @@ void findWay(char oop, int oped)
 
     for(char i : canOp)
     {
-        if(abs(i - oop) != 32 && oped+1 <=14)
+        if(abs(i - oop) != 32 && oped+1 <=maxStep)
         {
             findWay(i, oped+1);
             if(flag) return;
         }
+    }
+
+    /*debug*/if(oped+1>maxStep)
+    {
+        cout << ++debugNum << ": ";
+        for(int j = 0; j <= oped; j++)
+        {
+            cout << allop[j] << ' ';
+        }
+        cout << endl;
     }
 
     opcz(oop);
