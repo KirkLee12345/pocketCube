@@ -30,7 +30,7 @@ string allop[100];
 int cnt = 16;
 bool flag;
 int maxStep;
-/*debug*/int debugNum = 0;
+/*debug*/long long int debugNum = 0;
 
 
 int main(){
@@ -59,21 +59,16 @@ int main(){
     cout << "Start to find the answer..." << endl;
 	startFindWay();
 
+    cout << "Found one possible answer: ";
     for(int i = 1; i <= cnt; i++)
     {
-        if(allop[i]==allop[i+1] && allop[i+1]==allop[i+2] && allop[i+2]==allop[i+3])
-        {
-            i = i + 3;
-            continue;
-        }
-        cout << "Found one possible answer: ";
         cout << allop[i] << ' ';
     }
 	
 	return 0;
 }
 
-void startFindWay()
+void startFindWay()  // 程序入口
 {
     for(maxStep = 1; maxStep <= 14; maxStep++)
     {
@@ -85,14 +80,16 @@ void startFindWay()
     }
 }
 
-void findWay(char oop, int oped)
+void findWay(char oop, int oped)  // 用来递归的函数
 {
-    if(isOK())
-    {
-        flag = true;
-        cnt = oped-1;
-        return;
-    }
+//    if(isOK())
+//    {
+//        flag = true;
+//        cnt = oped-1;
+//        return;
+//    }  // 重复判定，不确定能不能直接删，注释掉先~
+
+    if(oped >= 3 && allop[oped] == allop[oped-1] && allop[oped] == allop[oped-2]) return;  // 当有三个连续一样的转动操作后直接退出，即剪枝，减少运算量
 
     allop[oped] = oop;
     op(oop);
@@ -113,7 +110,7 @@ void findWay(char oop, int oped)
         }
     }
 
-    /*debug*/if(oped+1>maxStep)
+    /*debug*/if(oped+1>maxStep)  // Debug用来输出此时程序运算到哪里了，减缓焦虑（bushi
     {
         cout << ++debugNum << ": ";
         for(int j = 0; j <= oped; j++)
@@ -127,7 +124,7 @@ void findWay(char oop, int oped)
 
 }
 
-void opcz(char xop) {
+void opcz(char xop){  // 撤销旋转操作
 
     if(xop >= 65 && xop <= 90)
     {
@@ -151,7 +148,7 @@ bool isOK()
     return true;
 }
 
-void op(char s)
+void op(char s)  // 转动魔方的具体实现
 {
 
     char t;
